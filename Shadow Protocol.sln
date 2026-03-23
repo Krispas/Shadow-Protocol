@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S - Project1", "S - Project1\S - Project1.csproj", "{E5FAC52F-9C09-4314-B766-04CBD4DD5E53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shadow Protocol", "Shadow Protocol\Shadow Protocol.csproj", "{E5FAC52F-9C09-4314-B766-04CBD4DD5E53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
