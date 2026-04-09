@@ -5,25 +5,34 @@ class Program
 {
     static void Main()
     {
-        MenuSystems menuSystems = new MenuSystems(); 
+        MenuSystems menuSystems = new MenuSystems();
         MissionManager missionManager = new MissionManager();
+
         string path = Path.Combine(AppContext.BaseDirectory, "missions.json");
         missionManager.LoadMissions(path);
 
-        int choice = menuSystems.mainMenu();
-        switch (choice)
+        bool running = true;
+
+        while (running)
         {
-            case 0:
-                break;
+            int choice = menuSystems.mainMenu();
 
-            case 1:
-                break;
+            switch (choice)
+            {
+                case 0:
+                    break;
 
-            case 2:
-                missionManager.StartMissionById(0);
-                Console.ReadKey();
-                break;
+                case 1:
+                    break;
+
+                case 2:
+                    missionManager.StartMissionById(0);
+                    break;
+
+                case 3:
+                    running = false;
+                    break;
+            }
         }
     }
-    
 }

@@ -4,7 +4,7 @@ public class GameplayManager
 {
     private Render render = new Render();
 
-    public Mission currentMission;
+    public Mission currentMission = null;
 
     public int playerX;
     public int playerY;
@@ -38,6 +38,12 @@ public class GameplayManager
             playerDetected = IsPlayerDetected();
 
             render.RenderGame(currentMission, this);
+
+            if (playerDetected)
+            {
+                ShowMissionFailed();
+                return;
+            }
 
             ConsoleKey key = Console.ReadKey(true).Key;
 
@@ -127,8 +133,35 @@ public class GameplayManager
             targetEliminated)
         {
             missionFinished = true;
-            Console.Clear();
-            Console.WriteLine("Mise splnena.");
+            ShowMissionCompleted();
+        }
+    }
+
+    private void ShowMissionFailed()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("Mise selhalo, skill issue!.");
+        Console.ResetColor();
+        Console.WriteLine();
+        Console.WriteLine("Zmackni Enter pro navrat do main menu.");
+
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter)
+        {
+        }
+    }
+
+    private void ShowMissionCompleted()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Mise splnena, dobra prace.");
+        Console.ResetColor();
+        Console.WriteLine();
+        Console.WriteLine("Zmackni Enter pro navrat do main menu.");
+
+        while (Console.ReadKey(true).Key != ConsoleKey.Enter)
+        {
         }
     }
 

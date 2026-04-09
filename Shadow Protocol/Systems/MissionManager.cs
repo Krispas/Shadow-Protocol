@@ -33,7 +33,7 @@ public class MissionManager
         missions = loadedFile.missions;
     }
 
-    public Mission FindMissionById(int missionId)
+    public Mission? FindMissionById(int missionId)
     {
         foreach (Mission mission in missions)
         {
@@ -46,7 +46,7 @@ public class MissionManager
 
     public void StartMissionById(int missionId)
     {
-        Mission mission = FindMissionById(missionId);
+        Mission? mission = FindMissionById(missionId);
 
         if (mission == null)
         {
@@ -73,6 +73,7 @@ public class Mission
     public string objective = "";
 
     public List<string> legend = new();
+    public List<string> instructions = new();
     public List<string> layout = new();
 
     public Position playerStart = new();
@@ -81,8 +82,6 @@ public class Mission
     public List<Enemy> enemies = new();
     public List<Item> items = new();
     public List<Camera> cameras = new();
-
-    public List<string> tutorialSteps = new();
 }
 
 public class Position

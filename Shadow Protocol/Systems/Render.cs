@@ -1,4 +1,6 @@
-﻿namespace Shadow_Protocol.Systems;
+﻿using System.Collections.Generic;
+
+namespace Shadow_Protocol.Systems;
 
 public class Render
 {
@@ -43,10 +45,7 @@ public class Render
 
             for (int x = 0; x < width; x++)
             {
-                if (x < row.Length)
-                    map[y, x] = row[x];
-                else
-                    map[y, x] = ' ';
+                map[y, x] = x < row.Length ? row[x] : ' ';
             }
         }
 
@@ -72,50 +71,97 @@ public class Render
         map[mission.exit.y, mission.exit.x] = 'X';
         map[gameplay.playerY, gameplay.playerX] = 'P';
 
-        for (int y = 0; y < height; y++)
+        List<string> rightPanel = new List<string>();
+
+        if (mission.legend != null && mission.legend.Count > 0)
         {
-            for (int x = 0; x < width; x++)
+            rightPanel.Add("LEGENDA");
+            rightPanel.AddRange(mission.legend);
+        }
+
+        if (mission.instructions != null && mission.instructions.Count > 0)
+        {
+            if (rightPanel.Count > 0)
+                rightPanel.Add("");
+
+            rightPanel.Add("INSTRUKCE");
+
+            foreach (string instruction in mission.instructions)
             {
-                char tile = map[y, x];
+                rightPanel.Add("- " + instruction);
+            }
+        }
 
-                switch (tile)
+        int totalLines = Math.Max(height, rightPanel.Count);
+
+        for (int y = 0; y < totalLines; y++)
+        {
+            if (y < height)
+            {
+                for (int x = 0; x < width; x++)
                 {
-                    case '#':
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        break;
-                    case 'P':
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        break;
-                    case 'K':
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        break;
-                    case '=':
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        break;
-                    case 'C':
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        break;
-                    case 'G':
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        break;
-                    case 'T':
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        break;
-                    case 'X':
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        break;
-                    case '!':
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        break;
-                    case '?':
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        break;
-                    default:
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        break;
-                }
+                    char tile = map[y, x];
 
-                Console.Write(tile);
+                    switch (tile)
+                    {
+                        case '#':
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            break;
+                        case 'P':
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            break;
+                        case 'K':
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            break;
+                        case '=':
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            break;
+                        case 'C':
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            break;
+                        case 'G':
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            break;
+                        case 'T':
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            break;
+                        case 'X':
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            break;
+                        case '!':
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            break;
+                        case '?':
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            break;
+                        default:
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            break;
+                    }
+
+                    Console.Write(tile);
+                }
+            }
+            else
+            {
+                Console.Write(new string(' ', width));
+            }
+
+            Console.ResetColor();
+            Console.Write("     ");
+
+            if (y < rightPanel.Count)
+            {
+                if (rightPanel[y] == "LEGENDA" || rightPanel[y] == "INSTRUKCE")
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(rightPanel[y]);
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(rightPanel[y]);
+                }
             }
 
             Console.WriteLine();

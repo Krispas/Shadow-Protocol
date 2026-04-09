@@ -10,7 +10,8 @@ public class MenuSystems
         {
             "Nova hra",
             "Nacist hru",
-            "Tutorial"
+            "Tutorial",
+            "Ukončit"
         };
 
         int selectedIndex = 0;
