@@ -5,20 +5,25 @@ class Program
 {
     static void Main()
     {
-        MenuSystems menuSystems = new MenuSystems();
+        MenuSystems menuSystems = new MenuSystems(); 
+        MissionManager missionManager = new MissionManager();
+        string path = Path.Combine(AppContext.BaseDirectory, "missions.json");
+        missionManager.LoadMissions(path);
 
-        menuSystems.MainMenu();
-        string choice = menuSystems.MainMenu().ToString();
+        int choice = menuSystems.mainMenu();
         switch (choice)
         {
-            case "Nova hra":
+            case 0:
                 break;
 
-            case "Nacist hru":
+            case 1:
                 break;
 
-            case "Tutorial":
+            case 2:
+                missionManager.StartMissionById(0);
+                Console.ReadKey();
                 break;
         }
     }
+    
 }

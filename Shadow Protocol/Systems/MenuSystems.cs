@@ -4,7 +4,7 @@ public class MenuSystems
 {
     private string systemUsername = Environment.UserName;
 
-    public int MainMenu()
+    public int mainMenu()
     {
         string[] options =
         {
@@ -19,7 +19,7 @@ public class MenuSystems
         while (true)
         {
             Console.Clear();
-            DrawMainMenu(options, selectedIndex);
+            showMainMenu(options, selectedIndex);
 
             ConsoleKey key = Console.ReadKey(true).Key;
 
@@ -44,7 +44,7 @@ public class MenuSystems
         }
     }
 
-    private void DrawMainMenu(string[] options, int selectedIndex)
+    private void showMainMenu(string[] options, int selectedIndex)
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine(@"
