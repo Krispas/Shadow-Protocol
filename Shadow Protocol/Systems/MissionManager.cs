@@ -10,17 +10,14 @@ public class MissionManager
     {
         string jsonContent = File.ReadAllText(path);
 
-        MissionFile? loadedFile = JsonSerializer.Deserialize<MissionFile>(
-            jsonContent,
+        MissionFile? loadedFile = JsonSerializer.Deserialize<MissionFile>(jsonContent, 
             new JsonSerializerOptions
-            {
-                IncludeFields = true
-            }
+            {IncludeFields = true}
         );
 
         if (loadedFile == null)
         {
-            Console.WriteLine("Failed to parse mission file.");
+            Console.WriteLine("Chyba v načítání misí.");
             return;
         }
 
@@ -45,7 +42,7 @@ public class MissionManager
         if (mission == null)
         {
             Console.Clear();
-            Console.WriteLine($"Mission with ID {missionId} was not found.");
+            Console.WriteLine("Misse nenalezena.");
             return;
         }
 
