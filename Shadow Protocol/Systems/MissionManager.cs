@@ -8,16 +8,10 @@ public class MissionManager
 
     public void LoadMissions(string path)
     {
-        if (!File.Exists(path))
-        {
-            Console.WriteLine($"Mission file not found: {path}");
-            return;
-        }
-
-        string json = File.ReadAllText(path);
+        string jsonContent = File.ReadAllText(path);
 
         MissionFile? loadedFile = JsonSerializer.Deserialize<MissionFile>(
-            json,
+            jsonContent,
             new JsonSerializerOptions
             {
                 IncludeFields = true
