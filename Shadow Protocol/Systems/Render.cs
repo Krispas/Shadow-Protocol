@@ -192,40 +192,52 @@ public class Render
         }
     }
 
-    private void RenderLineOfSight(char[,] map, Mission mission, int startX, int startY, string direction, int range, char symbol)
+    private void RenderLineOfSight(char[,] map, Mission mission, int startX, int startY, string direction, int range,
+        char symbol)
     {
         for (int i = 1; i <= range; i++)
         {
-            int x = startX;
-            int y = startY;
-
-            switch (direction)
+            for (int offset = -i; offset <= i; offset++)
             {
-                case "up":
-                    y -= i;
-                    break;
-                case "down":
-                    y += i;
-                    break;
-                case "left":
-                    x -= i;
-                    break;
-                case "right":
-                    x += i;
-                    break;
+                int x = startX;
+                int y = startY;
+
+                switch (direction)
+                {
+                    case "up":
+                        y -= i;
+                        x += offset;
+                        break;
+
+                    case "down":
+                        y += i;
+                        x += offset;
+                        break;
+
+                    case "left":
+                        x -= i;
+                        y += offset;
+                        break;
+
+                    case "right":
+                        x += i;
+                        y += offset;
+                        break;
+                }
+
+
+                if (y < 0 || y >= mission.layout.Count)
+                    return;
+
+                if (x < 0 || x >= mission.layout[y].Length)
+                    return;
+
+                if (mission.layout[y][x] == '#')
+                    return;
+
+                if (map[y, x] == '.')
+                    map[y, x] = symbol;
             }
-
-            if (y < 0 || y >= mission.layout.Count)
-                return;
-
-            if (x < 0 || x >= mission.layout[y].Length)
-                return;
-
-            if (mission.layout[y][x] == '#')
-                return;
-
-            if (map[y, x] == '.')
-                map[y, x] = symbol;
         }
     }
 
