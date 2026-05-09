@@ -10,10 +10,7 @@ public class MissionManager
     {
         string jsonContent = File.ReadAllText(path);
 
-        MissionFile? loadedFile = JsonSerializer.Deserialize<MissionFile>(jsonContent, 
-            new JsonSerializerOptions
-            {IncludeFields = true}
-        );
+        MissionFile? loadedFile = JsonSerializer.Deserialize<MissionFile>(jsonContent, new JsonSerializerOptions {IncludeFields = true});
 
         if (loadedFile == null)
         {
@@ -37,9 +34,9 @@ public class MissionManager
 
     public void StartMissionById(int missionId)
     {
-        Mission? mission = FindMissionById(missionId);
+        Mission? foundMission = FindMissionById(missionId);
 
-        if (mission == null)
+        if (foundMission == null)
         {
             Console.Clear();
             Console.WriteLine("Misse nenalezena.");
@@ -47,7 +44,7 @@ public class MissionManager
         }
 
         GameplayManager gameplayManager = new GameplayManager();
-        gameplayManager.StartMission(mission);
+        gameplayManager.StartMission(foundMission);
     }
 }
 
@@ -60,19 +57,31 @@ public class Mission
 {
     public int id;
     public string name = "";
-    public string type = "";
-    public string objective = "";
+    public string type;
+    public string overallObjective = "";
 
     public List<string> legend = new();
     public List<string> instructions = new();
-    public List<string> layout = new();
+    public List<Layouts> layouts = new();
 
     public Position playerStart = new();
     public Position exit = new();
-
+    
+    public Target target = new();
+    public Documents documents = new();
+    public List<Keycard> Keycards = new();
+    public List<Door> Doors = new();
+    
     public List<Enemy> enemies = new();
-    public List<Item> items = new();
     public List<Camera> cameras = new();
+}
+
+public class Layouts
+{
+    public string areaName = "";
+    public int areaID;
+    public string areaObjective = "";
+    public List<string> layout = new();
 }
 
 public class Position
@@ -83,35 +92,47 @@ public class Position
 
 public class Enemy
 {
-    public string type = "";
-    public string name = "";
-
-    public int x;
-    public int y;
+    public string type;
+    public string name;
+    public bool isAlive = true;
+    
+    public Position position;
 
     public int hp;
     public int attack;
-
-    public string direction = "";
-    public int detectionRange;
-
-    public bool isTarget;
+    
+    public string direction;
+    public int range;
 }
-
-public class Item
-{
-    public string type = "";
-    public string name = "";
-
-    public int x;
-    public int y;
-}
-
 public class Camera
 {
-    public int x;
-    public int y;
+    public Position position;
 
-    public string direction = "";
+    public string direction;
     public int range;
+}
+
+public class Target
+{
+    public bool isEliminated = false;
+    public string name;
+    public Position position;
+}
+
+public class Documents
+{
+    public bool hasDocuments = false;
+    public Position position;
+}
+public class Keycard
+{
+    public bool hasKeycard = false;
+    public string color;
+    public Position position;
+}
+
+public class Door
+{
+    public Position position;
+    public string color;
 }

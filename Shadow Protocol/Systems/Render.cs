@@ -14,9 +14,9 @@ public class Render
         Console.WriteLine("====================================");
         Console.ResetColor();
 
-        Console.WriteLine($"Keycard: {(gameplay.hasKeycard ? "ANO" : "NE")}");
-        Console.WriteLine($"Dokumenty: {(gameplay.hasDocuments ? "ANO" : "NE")}");
-        Console.WriteLine($"Cil eliminovan: {(gameplay.targetEliminated ? "ANO" : "NE")}");
+        //Pridat jake bravy karty mas
+        Console.WriteLine($"Dokumenty: {(gameplay.currentMission.documents.hasDocuments ? "ANO" : "NE")}");
+        Console.WriteLine($"Cil eliminovan: {(gameplay.currentMission.target.isEliminated ? "ANO" : "NE")}");
         Console.WriteLine($"Detekce: {(gameplay.playerDetected ? "ANO" : "NE")}");
         Console.WriteLine();
 
@@ -37,7 +37,7 @@ public class Render
                 width = row.Length;
         }
 
-        char[,] map = new char[height, width];
+        char[,] currentMapFrame = new char[height, width];
 
         for (int y = 0; y < height; y++)
         {
@@ -45,31 +45,21 @@ public class Render
 
             for (int x = 0; x < width; x++)
             {
-                map[y, x] = x < row.Length ? row[x] : ' ';
+                if (x < row.Length)
+                {
+                    currentMapFrame[y, x] = row[x];
+                }
+                else
+                {
+                    currentMapFrame[y, x] = ' ';
+                }
             }
         }
 
-        RenderVisionZones(map, mission);
+        RenderVisionZones(currentMapFrame, mission);
 
-        foreach (Item item in mission.items)
-        {
-            if (item.type == "keycard" && !gameplay.hasKeycard)
-                map[item.y, item.x] = 'K';
-
-            if (item.type == "documents" && !gameplay.hasDocuments)
-                map[item.y, item.x] = '=';
-        }
-
-        foreach (Enemy enemy in mission.enemies)
-        {
-            if (enemy.isTarget && !gameplay.targetEliminated)
-                map[enemy.y, enemy.x] = 'T';
-            else if (!enemy.isTarget)
-                map[enemy.y, enemy.x] = 'G';
-        }
-
-        map[mission.exit.y, mission.exit.x] = 'X';
-        map[gameplay.playerY, gameplay.playerX] = 'P';
+        currentMapFrame[mission.exit.y, mission.exit.x] = 'X';
+        currentMapFrame[gameplay.playerY, gameplay.playerX] = 'P';
 
         List<string> rightPanel = new List<string>();
 
@@ -100,7 +90,7 @@ public class Render
             {
                 for (int x = 0; x < width; x++)
                 {
-                    char tile = map[y, x];
+                    char tile = currentMapFrame[y, x];
 
                     switch (tile)
                     {
@@ -174,21 +164,18 @@ public class Render
     {
         foreach (Camera camera in mission.cameras)
         {
-            if (IsInsideMap(camera.x, camera.y, map))
-                map[camera.y, camera.x] = 'C';
+            if (IsInsideMap(camera.position.x, camera.position.y, map))
+                map[camera.position.y, camera.position.x] = 'C';
 
-            RenderLineOfSight(map, mission, camera.x, camera.y, camera.direction, camera.range, '!');
+            RenderLineOfSight(map, mission, camera.position.x, camera.position.y, camera.direction, camera.range, '!');
         }
 
         foreach (Enemy enemy in mission.enemies)
         {
-            if (enemy.isTarget)
-                continue;
+            if (IsInsideMap(enemy.position.x, enemy.position.y, map))
+                map[enemy.position.y, enemy.position.x] = 'G';
 
-            if (IsInsideMap(enemy.x, enemy.y, map))
-                map[enemy.y, enemy.x] = 'G';
-
-            RenderLineOfSight(map, mission, enemy.x, enemy.y, enemy.direction, enemy.detectionRange, '?');
+            RenderLineOfSight(map, mission, enemy.position.x, enemy.position.y, enemy.direction, enemy.range, '?');
         }
     }
 
@@ -197,7 +184,8 @@ public class Render
     {
         for (int i = 1; i <= range; i++)
         {
-            for (int offset = -i; offset <= i; offset++)
+            int maxWidth = Math.Min(i / 2, 10);
+            for (int offset = -maxWidth; offset <= maxWidth; offset++)
             {
                 int x = startX;
                 int y = startY;

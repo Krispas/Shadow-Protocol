@@ -8,23 +8,16 @@ public class GameplayManager
 
     public int playerX;
     public int playerY;
-
-    public bool hasKeycard = false;
-    public bool hasDocuments = false;
-    public bool targetEliminated = false;
-    public bool missionFinished = false;
-    public bool playerDetected = false;
+    public bool missionFinished;
+    public bool playerDetected;
 
     public void StartMission(Mission mission)
     {
         currentMission = mission;
 
-        playerX = mission.playerStart.x;
-        playerY = mission.playerStart.y;
-
-        hasKeycard = false;
-        hasDocuments = false;
-        targetEliminated = false;
+        playerX = currentMission.playerStart.x;
+        playerY = currentMission.playerStart.y;
+        
         missionFinished = false;
         playerDetected = false;
 
@@ -74,7 +67,7 @@ public class GameplayManager
                     break;
             }
 
-            CheckMissionState();
+            CheckMissionState(); //DODELAT
         }
     }
 
@@ -114,29 +107,8 @@ public class GameplayManager
                     hasDocuments = true;
             }
         }
-
-        foreach (Enemy enemy in currentMission.enemies)
-        {
-            if (enemy.x == playerX && enemy.y == playerY && enemy.isTarget)
-            {
-                targetEliminated = true;
-            }
-        }
     }
-
-    private void CheckMissionState()
-    {
-        if (playerX == currentMission.exit.x &&
-            playerY == currentMission.exit.y &&
-            hasKeycard &&
-            hasDocuments &&
-            targetEliminated)
-        {
-            missionFinished = true;
-            ShowMissionCompleted();
-        }
-    }
-
+    
     private void ShowMissionFailed()
     {
         Console.Clear();
@@ -186,33 +158,41 @@ public class GameplayManager
     {
         for (int i = 1; i <= camera.range; i++)
         {
-            int checkX = camera.x;
-            int checkY = camera.y;
-
-            switch (camera.direction)
+            int maxWidth = Math.Min(i / 2, 10);
+            for (int offset = -maxWidth; offset <= maxWidth; offset++)
             {
-                case "up":
-                    checkY -= i;
-                    break;
-                case "down":
-                    checkY += i;
-                    break;
-                case "left":
-                    checkX -= i;
-                    break;
-                case "right":
-                    checkX += i;
-                    break;
+                int checkX = camera.position.x;
+                int checkY = camera.position.y;
+
+                switch (camera.direction)
+                {
+                    case "up":
+                        checkY -= i;
+                        checkX += offset;
+                        break;
+                    case "down":
+                        checkY += i;
+                        checkX += offset;
+                        break;
+                    case "left":
+                        checkX -= i;
+                        checkY += offset;
+                        break;
+                    case "right":
+                        checkX += i;
+                        checkY += offset;
+                        break;
+                }
+
+                if (!IsInsideMap(checkX, checkY))
+                    return false;
+
+                if (currentMission.layout[checkY][checkX] == '#')
+                    return false;
+
+                if (checkX == playerX && checkY == playerY)
+                    return true;
             }
-
-            if (!IsInsideMap(checkX, checkY))
-                return false;
-
-            if (currentMission.layout[checkY][checkX] == '#')
-                return false;
-
-            if (checkX == playerX && checkY == playerY)
-                return true;
         }
 
         return false;
@@ -220,26 +200,33 @@ public class GameplayManager
 
     private bool CanEnemySeePlayer(Enemy enemy)
     {
-        for (int i = 1; i <= enemy.detectionRange; i++)
+        for (int i = 1; i <= enemy.range; i++)
         {
-            int checkX = enemy.x;
-            int checkY = enemy.y;
-
-            switch (enemy.direction)
+            int maxWidth = Math.Min(i / 2, 10);
+            for (int offset = -maxWidth; offset <= maxWidth; offset++)
             {
-                case "up":
-                    checkY -= i;
-                    break;
-                case "down":
-                    checkY += i;
-                    break;
-                case "left":
-                    checkX -= i;
-                    break;
-                case "right":
-                    checkX += i;
-                    break;
-            }
+                int checkX = enemy.position.x;
+                int checkY = enemy.position.y;
+
+                switch (enemy.direction)
+                {
+                    case "up":
+                        checkY -= i;
+                        checkX += offset;
+                        break;
+                    case "down":
+                        checkY += i;
+                        checkX += offset;
+                        break;
+                    case "left":
+                        checkX -= i;
+                        checkY += offset;
+                        break;
+                    case "right":
+                        checkX += i;
+                        checkY += offset;
+                        break;
+                }
 
             if (!IsInsideMap(checkX, checkY))
                 return false;
