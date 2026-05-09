@@ -4,8 +4,8 @@ public class GameplayManager
 {
     private Render render = new Render();
 
-    public Mission currentMission = null;
-
+    public Mission? currentMission;
+    public int currentAreaID = 0;
     public int playerX;
     public int playerY;
     public bool missionFinished;
@@ -85,28 +85,22 @@ public class GameplayManager
 
     private bool IsWalkable(int x, int y)
     {
-        if (y < 0 || y >= currentMission.layout.Count)
+        if (y < 0 || y >= currentMission.layouts[currentAreaID].layout.Count)
             return false;
 
-        if (x < 0 || x >= currentMission.layout[y].Length)
+        if (x < 0 || x >= currentMission.layouts[currentAreaID].layout[y].Length)
             return false;
 
-        return currentMission.layout[y][x] != '#';
+        return currentMission.layouts[currentAreaID].layout[y][x] != '#';
     }
 
     private void Interact()
     {
-        foreach (Item item in currentMission.items)
+        if (currentMission.documents.position.x == playerX && currentMission.documents.position.y == playerY)
         {
-            if (item.x == playerX && item.y == playerY)
-            {
-                if (item.type == "keycard")
-                    hasKeycard = true;
-
-                if (item.type == "documents")
-                    hasDocuments = true;
-            }
+            currentMission.documents.hasDocuments = true;
         }
+        if 
     }
     
     private void ShowMissionFailed()
@@ -187,7 +181,7 @@ public class GameplayManager
                 if (!IsInsideMap(checkX, checkY))
                     return false;
 
-                if (currentMission.layout[checkY][checkX] == '#')
+                if (currentMission.layouts[currentAreaID].layout[checkY][checkX] == '#')
                     return false;
 
                 if (checkX == playerX && checkY == playerY)
@@ -228,14 +222,15 @@ public class GameplayManager
                         break;
                 }
 
-            if (!IsInsideMap(checkX, checkY))
-                return false;
+                if (!IsInsideMap(checkX, checkY))
+                    return false;
 
-            if (currentMission.layout[checkY][checkX] == '#')
-                return false;
+                if (currentMission.layouts[currentAreaID].layout[checkY][checkX] == '#')
+                    return false;
 
-            if (checkX == playerX && checkY == playerY)
-                return true;
+                if (checkX == playerX && checkY == playerY)
+                    return true;
+            }
         }
 
         return false;
@@ -243,10 +238,10 @@ public class GameplayManager
 
     private bool IsInsideMap(int x, int y)
     {
-        if (y < 0 || y >= currentMission.layout.Count)
+        if (y < 0 || y >= currentMission.layouts[currentAreaID].layout.Count)
             return false;
 
-        if (x < 0 || x >= currentMission.layout[y].Length)
+        if (x < 0 || x >= currentMission.layouts[currentAreaID].layout[y].Length)
             return false;
 
         return true;

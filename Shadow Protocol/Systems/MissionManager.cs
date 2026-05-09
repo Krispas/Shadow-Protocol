@@ -79,7 +79,6 @@ public class Mission
 public class Layouts
 {
     public string areaName = "";
-    public int areaID;
     public string areaObjective = "";
     public List<string> layout = new();
 }
@@ -88,8 +87,15 @@ public class Position
 {
     public int x;
     public int y;
+    public int areaID;
 }
 
+public class missionPlayer
+{
+    public string type;
+    public bool isAlive = true;
+    public Position position;
+}
 public class Enemy
 {
     public string type;

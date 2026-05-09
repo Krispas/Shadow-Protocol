@@ -18,8 +18,7 @@
 
       "layouts": [
         {
-          "areaName" : "Entrance zone", 
-          "areaID" : 1,
+          "areaName" : "Entrance zone",
           "areaObjective": "Najdi modrou kartu.",
           "layout": [
           "########################################",
@@ -44,12 +43,17 @@
           "########################################"
           ]
         },
-        {}
+        {
+          
+        }
       ],
 
-      "playerStart": {
-        "x": 1,
-        "y": 1
+      "missionPlayer": {
+        "position": {
+          "x": 1,
+          "y": 1,
+          "areaID": 0
+        }
       },
 
       "exit": {
@@ -61,54 +65,53 @@
         {
           "type": "guard",
           "name": "Strážný",
-          "x": 6,
-          "y": 9,
           "hp": 55,
           "attack": 10,
           "direction": "right",
           "detectionRange": 5,
-          "isTarget": false
-        },
-        {
-          "type": "target",
-          "name": "Velitel",
-          "x": 30,
-          "y": 17,
-          "hp": 80,
-          "attack": 14,
-          "direction": "left",
-          "detectionRange": 6,
-          "isTarget": true
+          "position": {
+            "x": 6,
+            "y": 9,
+            "areaID": 0
+          }
         }
       ],
-
-      "items": [
-        {
-          "type": "keycard",
-          "name": "Karta",
-          "x": 3,
-          "y": 6
-        },
-        {
-          "type": "documents",
-          "name": "Dokumenty",
-          "x": 28,
-          "y": 6
+      
+        "keycards" : [
+          {
+            "color" : "blue",
+            "position": {
+              "x": 3,
+              "y": 6, 
+              "areaID": 0 
+          }
         }
-      ],
-
+        ],
+        "documents": {
+          "position": {
+            "x": 28,
+            "y": 6,
+            "areaID": 0
+          }
+        },
       "cameras": [
         {
-          "x": 15,
-          "y": 2,
           "direction": "down",
-          "range": 5
+          "range": 5,
+          "position": {
+            "x": 15,
+            "y": 2,
+            "areaID": 0
+          }
         },
         {
-          "x": 31,
-          "y": 12,
           "direction": "left",
-          "range": 6
+          "range": 6,
+          "position": {
+            "x": 31,
+            "y": 12,
+            "areaID": 0
+          }
         }
       ],
 

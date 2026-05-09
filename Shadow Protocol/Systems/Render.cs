@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-
-namespace Shadow_Protocol.Systems;
+﻿namespace Shadow_Protocol.Systems;
 
 public class Render
 {
-    public void RenderGame(Mission mission, GameplayManager gameplay)
+    public void RenderGame(Mission missionForRender, GameplayManager gameplay)
     {
         Console.Clear();
 
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("====================================");
-        Console.WriteLine($"MISSION: {mission.name}");
+        Console.WriteLine($"MISSION: {missionForRender.name}");
         Console.WriteLine("====================================");
         Console.ResetColor();
 
@@ -20,18 +18,18 @@ public class Render
         Console.WriteLine($"Detekce: {(gameplay.playerDetected ? "ANO" : "NE")}");
         Console.WriteLine();
 
-        RenderGameplayMap(mission, gameplay);
+        RenderGameplayMap(missionForRender, gameplay);
 
         Console.WriteLine();
         Console.WriteLine("WASD / sipky = pohyb, E = interakce");
     }
 
-    private void RenderGameplayMap(Mission mission, GameplayManager gameplay)
+    private void RenderGameplayMap(Mission missionForRender, GameplayManager gameplay)
     {
-        int height = mission.layout.Count;
+        int height = missionForRender.layouts[gameplay.currentAreaID].layout.Count;
         int width = 0;
 
-        foreach (string row in mission.layout)
+        foreach (string row in missionForRender.layouts[gameplay.currentAreaID].layout)
         {
             if (row.Length > width)
                 width = row.Length;
@@ -41,7 +39,7 @@ public class Render
 
         for (int y = 0; y < height; y++)
         {
-            string row = mission.layout[y];
+            string row = missionForRender.layouts[gameplay.currentAreaID].layout[y];
 
             for (int x = 0; x < width; x++)
             {
@@ -56,27 +54,24 @@ public class Render
             }
         }
 
-        RenderVisionZones(currentMapFrame, mission);
-
-        currentMapFrame[mission.exit.y, mission.exit.x] = 'X';
-        currentMapFrame[gameplay.playerY, gameplay.playerX] = 'P';
+        RenderObjects(currentMapFrame, missionForRender, gameplay);
 
         List<string> rightPanel = new List<string>();
 
-        if (mission.legend != null && mission.legend.Count > 0)
+        if (missionForRender.legend != null && missionForRender.legend.Count > 0)
         {
             rightPanel.Add("LEGENDA");
-            rightPanel.AddRange(mission.legend);
+            rightPanel.AddRange(missionForRender.legend);
         }
 
-        if (mission.instructions != null && mission.instructions.Count > 0)
+        if (missionForRender.instructions != null && missionForRender.instructions.Count > 0)
         {
             if (rightPanel.Count > 0)
                 rightPanel.Add("");
 
             rightPanel.Add("INSTRUKCE");
 
-            foreach (string instruction in mission.instructions)
+            foreach (string instruction in missionForRender.instructions)
             {
                 rightPanel.Add("- " + instruction);
             }
@@ -101,7 +96,8 @@ public class Render
                             Console.ForegroundColor = ConsoleColor.Green;
                             break;
                         case 'K':
-                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            
+                            Console.ForegroundColor = ConsoleColor.; //nastavit barvu podle barvy karty to same u dvery
                             break;
                         case '=':
                             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -117,6 +113,10 @@ public class Render
                             break;
                         case 'X':
                             Console.ForegroundColor = ConsoleColor.Blue;
+                            break;
+                        case 'D' :
+                            
+                            Console.ForegroundColor = ConsoleColor.; //nastavit barvu podle barvy dvery
                             break;
                         case '!':
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -160,27 +160,28 @@ public class Render
         Console.ResetColor();
     }
 
-    private void RenderVisionZones(char[,] map, Mission mission)
+    private void RenderObjects(char[,] currentMapFrame, Mission missionForRender, GameplayManager gameplay)
     {
-        foreach (Camera camera in mission.cameras)
+        currentMapFrame[missionForRender.exit.y, missionForRender.exit.x] = 'X';
+        currentMapFrame[gameplay.playerY, gameplay.playerX] = 'P';
+        foreach (Camera camera in missionForRender.cameras)
         {
-            if (IsInsideMap(camera.position.x, camera.position.y, map))
-                map[camera.position.y, camera.position.x] = 'C';
+            if (IsInsideMap(camera.position.x, camera.position.y, currentMapFrame))
+                currentMapFrame[camera.position.y, camera.position.x] = 'C';
 
-            RenderLineOfSight(map, mission, camera.position.x, camera.position.y, camera.direction, camera.range, '!');
+            RenderLineOfSight(currentMapFrame, missionForRender, camera.position.x, camera.position.y, camera.direction, camera.range, '!', gameplay);
         }
 
-        foreach (Enemy enemy in mission.enemies)
+        foreach (Enemy enemy in missionForRender.enemies)
         {
-            if (IsInsideMap(enemy.position.x, enemy.position.y, map))
-                map[enemy.position.y, enemy.position.x] = 'G';
+            if (IsInsideMap(enemy.position.x, enemy.position.y, currentMapFrame))
+                currentMapFrame[enemy.position.y, enemy.position.x] = 'G';
 
-            RenderLineOfSight(map, mission, enemy.position.x, enemy.position.y, enemy.direction, enemy.range, '?');
+            RenderLineOfSight(currentMapFrame, missionForRender, enemy.position.x, enemy.position.y, enemy.direction, enemy.range, '?', gameplay);
         }
     }
 
-    private void RenderLineOfSight(char[,] map, Mission mission, int startX, int startY, string direction, int range,
-        char symbol)
+    private void RenderLineOfSight(char[,] map, Mission missionForRender, int startX, int startY, string direction, int range, char symbol,GameplayManager gameplay)
     {
         for (int i = 1; i <= range; i++)
         {
@@ -214,13 +215,13 @@ public class Render
                 }
 
 
-                if (y < 0 || y >= mission.layout.Count)
+                if (y < 0 || y >= missionForRender.layouts[gameplay.currentAreaID].layout.Count)
                     return;
 
-                if (x < 0 || x >= mission.layout[y].Length)
+                if (x < 0 || x >= missionForRender.layouts[gameplay.currentAreaID].layout[y].Length)
                     return;
 
-                if (mission.layout[y][x] == '#')
+                if (missionForRender.layouts[gameplay.currentAreaID].layout[y][x] == '#')
                     return;
 
                 if (map[y, x] == '.')
