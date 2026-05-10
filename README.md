@@ -188,7 +188,7 @@ Obsah:
 
 ---
 
-### 3.5 AI vylepšení
+### 3.5 Vylepšení
 
 * pohyb nepřátel
 * patrolování
