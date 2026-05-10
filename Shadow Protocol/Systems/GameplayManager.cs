@@ -4,10 +4,11 @@ public class GameplayManager
 {
     private Render render = new Render();
 
-    public Mission? currentMission;
+    public Mission currentMission;
     public int currentAreaID = 0;
-    public int playerX;
-    public int playerY;
+    public int characterX;
+    public int characterY;
+    public int characterArenaID;
     public bool missionFinished;
     public bool playerDetected;
 
@@ -15,8 +16,9 @@ public class GameplayManager
     {
         currentMission = mission;
 
-        playerX = currentMission.playerStart.x;
-        playerY = currentMission.playerStart.y;
+        characterX = currentMission.missionCharacter.position.x;
+        characterY = currentMission.missionCharacter.position.y;
+        characterArenaID = currentMission.missionCharacter.position.areaID;
         
         missionFinished = false;
         playerDetected = false;
@@ -67,19 +69,19 @@ public class GameplayManager
                     break;
             }
 
-            CheckMissionState(); //DODELAT
+            //CheckMissionState(); //DODELAT
         }
     }
 
     private void MovePlayer(int dx, int dy)
     {
-        int newX = playerX + dx;
-        int newY = playerY + dy;
+        int newX = characterX + dx;
+        int newY = characterY + dy;
 
         if (IsWalkable(newX, newY))
         {
-            playerX = newX;
-            playerY = newY;
+            characterX = newX;
+            characterY = newY;
         }
     }
 
@@ -96,11 +98,11 @@ public class GameplayManager
 
     private void Interact()
     {
-        if (currentMission.documents.position.x == playerX && currentMission.documents.position.y == playerY)
+        if (currentMission.documents.position.x == characterX && currentMission.documents.position.y == characterY)
         {
             currentMission.documents.hasDocuments = true;
         }
-        if 
+        //Intract with cards etc
     }
     
     private void ShowMissionFailed()
@@ -184,7 +186,7 @@ public class GameplayManager
                 if (currentMission.layouts[currentAreaID].layout[checkY][checkX] == '#')
                     return false;
 
-                if (checkX == playerX && checkY == playerY)
+                if (checkX == characterX && checkY == characterY)
                     return true;
             }
         }
@@ -228,7 +230,7 @@ public class GameplayManager
                 if (currentMission.layouts[currentAreaID].layout[checkY][checkX] == '#')
                     return false;
 
-                if (checkX == playerX && checkY == playerY)
+                if (checkX == characterX && checkY == characterY)
                     return true;
             }
         }

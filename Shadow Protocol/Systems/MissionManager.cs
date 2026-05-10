@@ -63,15 +63,13 @@ public class Mission
     public List<string> legend = new();
     public List<string> instructions = new();
     public List<Layouts> layouts = new();
-
-    public Position playerStart = new();
-    public Position exit = new();
     
+    public MissionCharacter missionCharacter = new();
     public Target target = new();
     public Documents documents = new();
-    public List<Keycard> Keycards = new();
-    public List<Door> Doors = new();
-    
+    public List<Keycard> keycards = new();
+    public List<Door> doors = new();
+    public Position exit = new();
     public List<Enemy> enemies = new();
     public List<Camera> cameras = new();
 }
@@ -90,7 +88,7 @@ public class Position
     public int areaID;
 }
 
-public class missionPlayer
+public class MissionCharacter
 {
     public string type;
     public bool isAlive = true;

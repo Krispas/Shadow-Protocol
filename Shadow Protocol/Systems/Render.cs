@@ -1,4 +1,6 @@
-﻿namespace Shadow_Protocol.Systems;
+﻿using System.Runtime.InteropServices;
+
+namespace Shadow_Protocol.Systems;
 
 public class Render
 {
@@ -13,9 +15,6 @@ public class Render
         Console.ResetColor();
 
         //Pridat jake bravy karty mas
-        Console.WriteLine($"Dokumenty: {(gameplay.currentMission.documents.hasDocuments ? "ANO" : "NE")}");
-        Console.WriteLine($"Cil eliminovan: {(gameplay.currentMission.target.isEliminated ? "ANO" : "NE")}");
-        Console.WriteLine($"Detekce: {(gameplay.playerDetected ? "ANO" : "NE")}");
         Console.WriteLine();
 
         RenderGameplayMap(missionForRender, gameplay);
@@ -96,8 +95,7 @@ public class Render
                             Console.ForegroundColor = ConsoleColor.Green;
                             break;
                         case 'K':
-                            
-                            Console.ForegroundColor = ConsoleColor.; //nastavit barvu podle barvy karty to same u dvery
+                            Console.ForegroundColor = GetKeycardColor(x, y, missionForRender, gameplay);
                             break;
                         case '=':
                             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -114,9 +112,9 @@ public class Render
                         case 'X':
                             Console.ForegroundColor = ConsoleColor.Blue;
                             break;
-                        case 'D' :
-                            
-                            Console.ForegroundColor = ConsoleColor.; //nastavit barvu podle barvy dvery
+                        case 'D':
+
+                            Console.ForegroundColor = ConsoleColor.DarkGreen; //nastavit barvu podle barvy dvery
                             break;
                         case '!':
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -162,26 +160,48 @@ public class Render
 
     private void RenderObjects(char[,] currentMapFrame, Mission missionForRender, GameplayManager gameplay)
     {
-        currentMapFrame[missionForRender.exit.y, missionForRender.exit.x] = 'X';
-        currentMapFrame[gameplay.playerY, gameplay.playerX] = 'P';
+        if (IsInsideCurrentMap(missionForRender.exit.x, missionForRender.exit.y, currentMapFrame,
+                missionForRender.exit.areaID, gameplay))
+            currentMapFrame[missionForRender.exit.y, missionForRender.exit.x] = 'X';
+        if (IsInsideCurrentMap(gameplay.characterX, gameplay.characterY, currentMapFrame, gameplay.characterArenaID,
+                gameplay))
+            currentMapFrame[gameplay.characterY, gameplay.characterX] = 'P';
+        if (IsInsideCurrentMap(missionForRender.documents.position.x, missionForRender.documents.position.y,
+                currentMapFrame, missionForRender.documents.position.areaID, gameplay))
+            currentMapFrame[missionForRender.documents.position.y, missionForRender.documents.position.x] = '=';
+        if (IsInsideCurrentMap(missionForRender.target.position.x, missionForRender.target.position.y, currentMapFrame,
+                missionForRender.target.position.areaID, gameplay))
+            currentMapFrame[missionForRender.target.position.y, missionForRender.target.position.x] = 'T';
+
+        foreach (Door door in missionForRender.doors)
+        {
+            if (IsInsideCurrentMap(door.position.x, door.position.y, currentMapFrame, door.position.areaID, gameplay))
+                currentMapFrame[door.position.y, door.position.x] = 'D';
+        }
+
         foreach (Camera camera in missionForRender.cameras)
         {
-            if (IsInsideMap(camera.position.x, camera.position.y, currentMapFrame))
+            if (IsInsideCurrentMap(camera.position.x, camera.position.y, currentMapFrame, camera.position.areaID,
+                    gameplay))
                 currentMapFrame[camera.position.y, camera.position.x] = 'C';
 
-            RenderLineOfSight(currentMapFrame, missionForRender, camera.position.x, camera.position.y, camera.direction, camera.range, '!', gameplay);
+            RenderLineOfSight(currentMapFrame, missionForRender, camera.position.x, camera.position.y, camera.direction,
+                camera.range, '!', gameplay);
         }
 
         foreach (Enemy enemy in missionForRender.enemies)
         {
-            if (IsInsideMap(enemy.position.x, enemy.position.y, currentMapFrame))
+            if (IsInsideCurrentMap(enemy.position.x, enemy.position.y, currentMapFrame, enemy.position.areaID,
+                    gameplay))
                 currentMapFrame[enemy.position.y, enemy.position.x] = 'G';
 
-            RenderLineOfSight(currentMapFrame, missionForRender, enemy.position.x, enemy.position.y, enemy.direction, enemy.range, '?', gameplay);
+            RenderLineOfSight(currentMapFrame, missionForRender, enemy.position.x, enemy.position.y, enemy.direction,
+                enemy.range, '?', gameplay);
         }
     }
 
-    private void RenderLineOfSight(char[,] map, Mission missionForRender, int startX, int startY, string direction, int range, char symbol,GameplayManager gameplay)
+    private void RenderLineOfSight(char[,] map, Mission missionForRender, int startX, int startY, string direction,
+        int range, char symbol, GameplayManager gameplay)
     {
         for (int i = 1; i <= range; i++)
         {
@@ -230,8 +250,29 @@ public class Render
         }
     }
 
-    private bool IsInsideMap(int x, int y, char[,] map)
+    private bool IsInsideCurrentMap(int x, int y, char[,] currentMapFrame, int objectsArenaID, GameplayManager gameplay)
     {
-        return y >= 0 && y < map.GetLength(0) && x >= 0 && x < map.GetLength(1);
+        return y >= 0 && y < currentMapFrame.GetLength(0) && x >= 0 && x < currentMapFrame.GetLength(1) &&
+               gameplay.currentAreaID == objectsArenaID;
+    }
+
+    private ConsoleColor GetKeycardColor(int x, int y, Mission missionForRender, GameplayManager gameplay) // Na tutu bylo vyuzito AI 
+    {
+        foreach (Keycard keycard in missionForRender.keycards)
+        {
+            if (keycard.position.x == x && keycard.position.y == y && keycard.position.areaID == gameplay.currentAreaID)
+                return Enum.Parse<ConsoleColor>(keycard.color, true); //Na funkci Enum.Parse priso AI
+        }
+        return ConsoleColor.White ;
+    }
+    private ConsoleColor GetDoorColor(int x, int y, Mission missionForRender, GameplayManager gameplay) // Na tutu bylo vyuzito AI 
+    {
+        foreach (Door door in missionForRender.doors)
+        {
+            if (door.position.x == x && door.position.y == y && door.position.areaID == gameplay.currentAreaID)
+                return Enum.Parse<ConsoleColor>(door.color, true); //Na funkci Enum.Parse priso AI
+        }
+        return ConsoleColor.White ;
     }
 }
+
