@@ -102,7 +102,7 @@ public class GameplayManager
         {
             currentMission.documents.hasDocuments = true;
         }
-        //Intract with cards etc
+        
     }
     
     private void ShowMissionFailed()

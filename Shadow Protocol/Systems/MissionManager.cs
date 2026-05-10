@@ -65,7 +65,7 @@ public class Mission
     public List<Layouts> layouts = new();
     
     public MissionCharacter missionCharacter = new();
-    public Target? targets = new();
+    public Target? target = new();
     public Documents? documents = new();
     public List<Keycard>? keycards = new();
     public List<Door>? doors = new();
@@ -111,7 +111,7 @@ public class Enemy
 public class Camera
 {
     public Position position;
-
+    public bool isActive = true;
     public string direction;
     public int range;
 }

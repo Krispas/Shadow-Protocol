@@ -105,7 +105,7 @@
           {
             "color" : "blue",
             "position": {
-              "x": 3,
+              "x": 28,
               "y": 6, 
               "areaID": 0 
           }
@@ -125,7 +125,7 @@
           "position": {
             "x": 28,
             "y": 6,
-            "areaID": 0
+            "areaID": 1
           }
         },
       "cameras": [
