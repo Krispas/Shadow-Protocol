@@ -6,7 +6,7 @@
 
 Projekt **Shadow Protocol** je konzolová RPG / stealth hra vytvořená v jazyce C#.
 
-Hráč se ujímá role agenta, který:
+Hráč se má role agenta, který:
 
 * plní mise
 * vyhýbá se nepřátelům
@@ -19,7 +19,7 @@ Hráč se ujímá role agenta, který:
 
 ### 2.1 Main Menu
 
-* navigace pomocí šipek (↑ ↓)
+* navigace pomocí šipek
 * výběr pomocí Enter
 
 Možnosti:
@@ -188,7 +188,7 @@ Obsah:
 
 ---
 
-### 3.5 AI vylepšení
+### 3.5 Vylepšení
 
 * pohyb nepřátel
 * patrolování
