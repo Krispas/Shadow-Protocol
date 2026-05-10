@@ -5,6 +5,8 @@ class Program
 {
     static void Main()
     {
+        SaveManager saveManager = new SaveManager();
+        GameManager gameManager = new GameManager();
         MenuSystems menuSystems = new MenuSystems();
         MissionManager missionManager = new MissionManager();
 
@@ -23,7 +25,20 @@ class Program
                     break;
 
                 case 1:
+                    int selectedSaveIndex = menuSystems.SaveSelectMenu(saveManager);
+
+                    if (selectedSaveIndex != -1)
+                    {
+                        GameSave loadedSave = saveManager.saveFile.saves[selectedSaveIndex];
+
+                        gameManager.currentSave = loadedSave;
+
+                        Console.WriteLine($"Nacten save s hracem: {loadedSave.playerName}");
+                        Console.ReadKey(true);
+                    }
+
                     break;
+
 
                 case 2:
                     missionManager.StartMissionById(0);
