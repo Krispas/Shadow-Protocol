@@ -186,6 +186,9 @@ public class Render
                 if (IsInsideCurrentMap(door.position.x, door.position.y, currentMapFrame, door.position.areaID,
                         gameplay))
                     currentMapFrame[door.position.y, door.position.x] = 'D';
+                if (IsInsideCurrentMap(door.leadsToPosition.x, door.leadsToPosition.y, currentMapFrame, door.leadsToPosition.areaID,
+                        gameplay))
+                    currentMapFrame[door.leadsToPosition.y, door.leadsToPosition.x] = 'D';
             }
         }
         
@@ -305,6 +308,8 @@ public class Render
             if (door.color == null)
                 return ConsoleColor.White;
             if (door.position.x == x && door.position.y == y && door.position.areaID == gameplay.currentAreaID)
+                return Enum.Parse<ConsoleColor>(door.color, true); //Na funkci Enum.Parse priso AI
+            if (door.leadsToPosition.x == x && door.leadsToPosition.y == y && door.leadsToPosition.areaID == gameplay.currentAreaID)
                 return Enum.Parse<ConsoleColor>(door.color, true); //Na funkci Enum.Parse priso AI
         }
         return ConsoleColor.White ;

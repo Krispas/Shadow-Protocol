@@ -49,7 +49,7 @@ public class MenuSystems
     {
         saveManager.LoadSaves();
 
-        if (saveManager.saveFile.saves.Count == 0)
+        if (saveManager.activeSaveFile.saves.Count == 0)
         {
             Console.Clear();
             Console.WriteLine("Zadne savy neexistuji.");
@@ -74,14 +74,14 @@ public class MenuSystems
                     selectedIndex--;
 
                     if (selectedIndex < 0)
-                        selectedIndex = saveManager.saveFile.saves.Count - 1;
+                        selectedIndex = saveManager.activeSaveFile.saves.Count - 1;
 
                     break;
 
                 case ConsoleKey.DownArrow:
                     selectedIndex++;
 
-                    if (selectedIndex >= saveManager.saveFile.saves.Count)
+                    if (selectedIndex >= saveManager.activeSaveFile.saves.Count)
                         selectedIndex = 0;
 
                     break;
@@ -141,17 +141,17 @@ public class MenuSystems
         Console.WriteLine("Vyber save:");
         Console.WriteLine();
 
-        for (int i = 0; i < saveManager.saveFile.saves.Count; i++)
+        for (int i = 0; i < saveManager.activeSaveFile.saves.Count; i++)
         {
             if (i == selectedIndex)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"> {saveManager.saveFile.saves[i].playerName} <");
+                Console.WriteLine($"> {saveManager.activeSaveFile.saves[i].playerName} <");
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"  {saveManager.saveFile.saves[i].playerName}");
+                Console.WriteLine($"  {saveManager.activeSaveFile.saves[i].playerName}");
             }
         }
 

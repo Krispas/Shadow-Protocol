@@ -30,7 +30,7 @@ class Program
 
                     if (selectedSaveIndex != -1)
                     {
-                        GameSave loadedSave = saveManager.saveFile.saves[selectedSaveIndex];
+                        GameSave loadedSave = saveManager.activeSaveFile.saves[selectedSaveIndex];
 
                         gameManager.currentSave = loadedSave;
 

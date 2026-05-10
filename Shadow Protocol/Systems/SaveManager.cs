@@ -6,30 +6,23 @@ public class SaveManager
 {
     private string savePath = Path.Combine(AppContext.BaseDirectory, "save.json"); //Zde byla pomoc od AI
 
-    public SaveFile saveFile = new SaveFile();
+    public SaveFile activeSaveFile = new SaveFile();
 
     public void LoadSaves()
     {
-        if (!File.Exists(savePath))
-        {
-            saveFile = new SaveFile();
-            SaveSaves();
-            return;
-        }
-
         string json = File.ReadAllText(savePath);
         SaveFile? loaded = JsonSerializer.Deserialize<SaveFile>(
             json,
             new JsonSerializerOptions { IncludeFields = true }
         );
         if (loaded != null)
-            saveFile = loaded;
+            activeSaveFile = loaded;
     }
 
     public void SaveSaves()
     {
         string json = JsonSerializer.Serialize(
-            saveFile,
+            activeSaveFile,
             new JsonSerializerOptions
             {
                 IncludeFields = true,
@@ -44,17 +37,17 @@ public class SaveManager
     {
         LoadSaves();
 
-        for (int i = 0; i < saveFile.saves.Count; i++)
+        for (int i = 0; i < activeSaveFile.saves.Count; i++)
         {
-            if (saveFile.saves[i].saveId == save.saveId)
+            if (activeSaveFile.saves[i].saveId == save.saveId)
             {
-                saveFile.saves[i] = save;
+                activeSaveFile.saves[i] = save;
                 SaveSaves();
                 return;
             }
         }
 
-        saveFile.saves.Add(save);
+        activeSaveFile.saves.Add(save);
         SaveSaves();
     }
 }

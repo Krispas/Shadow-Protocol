@@ -126,6 +126,15 @@ public class GameplayManager
             {
                 currentAreaID = door.leadsToPosition.areaID;
             }
+            if (door.leadsToPosition.x == characterX && door.leadsToPosition.y == characterY &&
+                door.leadsToPosition.areaID == characterArenaID && door.color == null)
+            {
+                currentAreaID = door.position.areaID;
+            }
+            if (door.leadsToPosition.x == characterX && door.leadsToPosition.y == characterY && door.leadsToPosition.areaID == characterArenaID && colorsOfKeycardsOwned.Contains(door.color))
+            {
+                currentAreaID = door.position.areaID;
+            }
         }
         
     }
