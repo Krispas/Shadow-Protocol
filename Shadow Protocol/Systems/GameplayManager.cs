@@ -11,6 +11,7 @@ public class GameplayManager
     public int characterArenaID;
     public bool missionFinished;
     public bool playerDetected;
+    public List<string> colorsOfKeycardsOwned = new() ;
 
     public void StartMission(Mission mission)
     {
@@ -19,6 +20,7 @@ public class GameplayManager
         characterX = currentMission.missionCharacter.position.x;
         characterY = currentMission.missionCharacter.position.y;
         characterArenaID = currentMission.missionCharacter.position.areaID;
+        currentAreaID = characterArenaID;
         
         missionFinished = false;
         playerDetected = false;
@@ -30,6 +32,7 @@ public class GameplayManager
     {
         while (!missionFinished)
         {
+            characterArenaID = currentAreaID;
             playerDetected = IsPlayerDetected();
 
             render.RenderGame(currentMission, this);
@@ -98,9 +101,31 @@ public class GameplayManager
 
     private void Interact()
     {
-        if (currentMission.documents.position.x == characterX && currentMission.documents.position.y == characterY)
+        if (currentMission.documents.position.x == characterX && currentMission.documents.position.y == characterY && currentMission.documents.position.areaID == characterArenaID)
         {
             currentMission.documents.hasDocuments = true;
+        }
+
+        foreach (Keycard keycard in currentMission.keycards)
+        {
+            if (keycard.position.x == characterX && keycard.position.y == characterY && keycard.position.areaID == characterArenaID && !colorsOfKeycardsOwned.Contains(keycard.color))
+            {
+                colorsOfKeycardsOwned.Add(keycard.color);
+            }
+                
+        }
+
+        foreach (Door door in currentMission.doors)
+        {
+            if (door.position.x == characterX && door.position.y == characterY &&
+                door.position.areaID == characterArenaID && door.color == null)
+            {
+                currentAreaID = door.leadsToAreaID;
+            }
+            if (door.position.x == characterX && door.position.y == characterY && door.position.areaID == characterArenaID && colorsOfKeycardsOwned.Contains(door.color))
+            {
+                currentAreaID = door.leadsToAreaID;
+            }
         }
         
     }

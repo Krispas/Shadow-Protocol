@@ -14,7 +14,11 @@ public class Render
         Console.WriteLine("====================================");
         Console.ResetColor();
 
-        //Pridat jake bravy karty mas
+        Console.WriteLine("Karty co máš u sebe :");
+        foreach (string color in gameplay.colorsOfKeycardsOwned)
+        {
+            Console.WriteLine(color);
+        }
         Console.WriteLine();
 
         RenderGameplayMap(missionForRender, gameplay);
@@ -189,8 +193,7 @@ public class Render
         {
             foreach (Keycard keycard in missionForRender.keycards)
             {
-                if (IsInsideCurrentMap(keycard.position.x, keycard.position.y, currentMapFrame, keycard.position.areaID,
-                        gameplay))
+                if (IsInsideCurrentMap(keycard.position.x, keycard.position.y, currentMapFrame, keycard.position.areaID, gameplay) && !gameplay.colorsOfKeycardsOwned.Contains(keycard.color))
                     currentMapFrame[keycard.position.y, keycard.position.x] = 'K';
             }
         }
@@ -201,11 +204,13 @@ public class Render
             {
                 if (IsInsideCurrentMap(camera.position.x, camera.position.y, currentMapFrame, camera.position.areaID,
                         gameplay) && camera.isActive)
+                {
                     currentMapFrame[camera.position.y, camera.position.x] = 'C';
 
-                RenderLineOfSight(currentMapFrame, missionForRender, camera.position.x, camera.position.y,
-                    camera.direction,
-                    camera.range, '!', gameplay);
+                    RenderLineOfSight(currentMapFrame, missionForRender, camera.position.x, camera.position.y,
+                        camera.direction,
+                        camera.range, '!', gameplay);
+                }
             }
         }
 
@@ -213,12 +218,15 @@ public class Render
         {
             foreach (Enemy enemy in missionForRender.enemies)
             {
-                if (IsInsideCurrentMap(enemy.position.x, enemy.position.y, currentMapFrame, enemy.position.areaID, gameplay) && enemy.isAlive)
-                    currentMapFrame[enemy.position.y, enemy.position.x] = 'G';
+                if (IsInsideCurrentMap(enemy.position.x, enemy.position.y, currentMapFrame, enemy.position.areaID,
+                        gameplay) && enemy.isAlive)
+                {currentMapFrame[enemy.position.y, enemy.position.x] = 'G';
 
-                RenderLineOfSight(currentMapFrame, missionForRender, enemy.position.x, enemy.position.y,
+                    RenderLineOfSight(currentMapFrame, missionForRender, enemy.position.x, enemy.position.y,
                     enemy.direction,
                     enemy.range, '?', gameplay);
+                }
+                
             }
         }
         if (IsInsideCurrentMap(gameplay.characterX, gameplay.characterY, currentMapFrame, gameplay.characterArenaID, gameplay))
@@ -294,6 +302,8 @@ public class Render
     {
         foreach (Door door in missionForRender.doors)
         {
+            if (door.color == null)
+                return ConsoleColor.White;
             if (door.position.x == x && door.position.y == y && door.position.areaID == gameplay.currentAreaID)
                 return Enum.Parse<ConsoleColor>(door.color, true); //Na funkci Enum.Parse priso AI
         }

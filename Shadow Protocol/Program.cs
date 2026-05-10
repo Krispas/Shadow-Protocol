@@ -10,7 +10,7 @@ class Program
         MenuSystems menuSystems = new MenuSystems();
         MissionManager missionManager = new MissionManager();
 
-        string path = Path.Combine(AppContext.BaseDirectory, "missions.json");
+        string path = Path.Combine(AppContext.BaseDirectory, "missions.json"); 
         missionManager.LoadMissions(path);
 
         bool running = true;
@@ -22,6 +22,7 @@ class Program
             switch (choice)
             {
                 case 0:
+                    gameManager.CreateNewGame();
                     break;
 
                 case 1:

@@ -114,6 +114,7 @@
       "doors": [
         {
           "color": "blue",
+          "leadsToAreaID": 1,
           "position": {
             "x": 38,
             "y": 1,

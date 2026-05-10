@@ -138,5 +138,6 @@ public class Keycard
 public class Door
 {
     public Position position;
-    public string color;
+    public string? color;
+    public int leadsToAreaID;
 }

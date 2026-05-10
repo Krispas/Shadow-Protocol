@@ -4,7 +4,7 @@ namespace Shadow_Protocol.Systems;
 
 public class SaveManager
 {
-    private string savePath = "save.json";
+    private string savePath = Path.Combine(AppContext.BaseDirectory, "save.json"); //Zde byla pomoc od AI
 
     public SaveFile saveFile = new SaveFile();
 
@@ -18,12 +18,10 @@ public class SaveManager
         }
 
         string json = File.ReadAllText(savePath);
-
         SaveFile? loaded = JsonSerializer.Deserialize<SaveFile>(
             json,
             new JsonSerializerOptions { IncludeFields = true }
         );
-
         if (loaded != null)
             saveFile = loaded;
     }
@@ -70,6 +68,9 @@ public class GameSave
 {
     public int saveId;
     public string playerName = "";
+    public Agent agent = new();
+    public Sniper sniper = new();
+    public Operator operator_ = new();
     
     public List<CompletedMissionSave> completedMissions = new();
 }

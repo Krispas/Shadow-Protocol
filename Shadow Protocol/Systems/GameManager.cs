@@ -14,7 +14,7 @@ public class GameManager
         Console.WriteLine("You will first need to create a character.");
         Console.WriteLine("Enter your character name: ");
         characterName = Console.ReadLine().Trim();
-        currentSave.
+        currentSave.playerName = characterName;
         saveManager.SaveGame(currentSave);
     }
 }
