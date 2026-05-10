@@ -120,11 +120,11 @@ public class GameplayManager
             if (door.position.x == characterX && door.position.y == characterY &&
                 door.position.areaID == characterArenaID && door.color == null)
             {
-                currentAreaID = door.leadsToAreaID;
+                currentAreaID = door.leadsToPosition.areaID;
             }
             if (door.position.x == characterX && door.position.y == characterY && door.position.areaID == characterArenaID && colorsOfKeycardsOwned.Contains(door.color))
             {
-                currentAreaID = door.leadsToAreaID;
+                currentAreaID = door.leadsToPosition.areaID;
             }
         }
         

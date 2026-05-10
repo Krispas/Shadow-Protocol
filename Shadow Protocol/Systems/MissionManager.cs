@@ -139,5 +139,5 @@ public class Door
 {
     public Position position;
     public string? color;
-    public int leadsToAreaID;
+    public Position leadsToPosition;
 }

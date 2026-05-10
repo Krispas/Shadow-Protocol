@@ -114,12 +114,16 @@
       "doors": [
         {
           "color": "blue",
-          "leadsToAreaID": 1,
           "position": {
             "x": 38,
             "y": 1,
             "areaID": 0
-          }
+          },
+          "leadsToArea": {
+            "x": 38,
+            "y": 1,
+            "areaID": 1
+          } 
         }
       ],
         "documents": {
