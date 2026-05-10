@@ -65,13 +65,13 @@ public class Mission
     public List<Layouts> layouts = new();
     
     public MissionCharacter missionCharacter = new();
-    public Target target = new();
-    public Documents documents = new();
-    public List<Keycard> keycards = new();
-    public List<Door> doors = new();
+    public Target? targets = new();
+    public Documents? documents = new();
+    public List<Keycard>? keycards = new();
+    public List<Door>? doors = new();
     public Position exit = new();
-    public List<Enemy> enemies = new();
-    public List<Camera> cameras = new();
+    public List<Enemy>? enemies = new();
+    public List<Camera>? cameras = new();
 }
 
 public class Layouts

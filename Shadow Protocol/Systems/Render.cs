@@ -163,41 +163,59 @@ public class Render
         if (IsInsideCurrentMap(missionForRender.exit.x, missionForRender.exit.y, currentMapFrame,
                 missionForRender.exit.areaID, gameplay))
             currentMapFrame[missionForRender.exit.y, missionForRender.exit.x] = 'X';
-        if (IsInsideCurrentMap(gameplay.characterX, gameplay.characterY, currentMapFrame, gameplay.characterArenaID,
-                gameplay))
+        if (missionForRender.documents.position != null)
+        {
+            if (IsInsideCurrentMap(missionForRender.documents.position.x, missionForRender.documents.position.y,
+                    currentMapFrame, missionForRender.documents.position.areaID, gameplay))
+                currentMapFrame[missionForRender.documents.position.y, missionForRender.documents.position.x] = '=';
+        }
+
+        if (missionForRender.targets.position != null)
+        {
+            if (IsInsideCurrentMap(missionForRender.targets.position.x, missionForRender.targets.position.y,
+                    currentMapFrame, missionForRender.targets.position.areaID, gameplay))
+                currentMapFrame[missionForRender.targets.position.y, missionForRender.targets.position.x] = 'T';
+        }
+
+        if (missionForRender.doors != null)
+        {
+            foreach (Door door in missionForRender.doors)
+            {
+                if (IsInsideCurrentMap(door.position.x, door.position.y, currentMapFrame, door.position.areaID,
+                        gameplay))
+                    currentMapFrame[door.position.y, door.position.x] = 'D';
+            }
+        }
+
+        if (missionForRender.cameras != null)
+        {
+            foreach (Camera camera in missionForRender.cameras)
+            {
+                if (IsInsideCurrentMap(camera.position.x, camera.position.y, currentMapFrame, camera.position.areaID,
+                        gameplay))
+                    currentMapFrame[camera.position.y, camera.position.x] = 'C';
+
+                RenderLineOfSight(currentMapFrame, missionForRender, camera.position.x, camera.position.y,
+                    camera.direction,
+                    camera.range, '!', gameplay);
+            }
+        }
+
+        if (missionForRender.enemies != null)
+        {
+            foreach (Enemy enemy in missionForRender.enemies)
+            {
+                if (IsInsideCurrentMap(enemy.position.x, enemy.position.y, currentMapFrame, enemy.position.areaID,
+                        gameplay))
+                    currentMapFrame[enemy.position.y, enemy.position.x] = 'G';
+
+                RenderLineOfSight(currentMapFrame, missionForRender, enemy.position.x, enemy.position.y,
+                    enemy.direction,
+                    enemy.range, '?', gameplay);
+            }
+        }
+        if (IsInsideCurrentMap(gameplay.characterX, gameplay.characterY, currentMapFrame, gameplay.characterArenaID, gameplay))
             currentMapFrame[gameplay.characterY, gameplay.characterX] = 'P';
-        if (IsInsideCurrentMap(missionForRender.documents.position.x, missionForRender.documents.position.y,
-                currentMapFrame, missionForRender.documents.position.areaID, gameplay))
-            currentMapFrame[missionForRender.documents.position.y, missionForRender.documents.position.x] = '=';
-        if (IsInsideCurrentMap(missionForRender.target.position.x, missionForRender.target.position.y, currentMapFrame,
-                missionForRender.target.position.areaID, gameplay))
-            currentMapFrame[missionForRender.target.position.y, missionForRender.target.position.x] = 'T';
-
-        foreach (Door door in missionForRender.doors)
-        {
-            if (IsInsideCurrentMap(door.position.x, door.position.y, currentMapFrame, door.position.areaID, gameplay))
-                currentMapFrame[door.position.y, door.position.x] = 'D';
-        }
-
-        foreach (Camera camera in missionForRender.cameras)
-        {
-            if (IsInsideCurrentMap(camera.position.x, camera.position.y, currentMapFrame, camera.position.areaID,
-                    gameplay))
-                currentMapFrame[camera.position.y, camera.position.x] = 'C';
-
-            RenderLineOfSight(currentMapFrame, missionForRender, camera.position.x, camera.position.y, camera.direction,
-                camera.range, '!', gameplay);
-        }
-
-        foreach (Enemy enemy in missionForRender.enemies)
-        {
-            if (IsInsideCurrentMap(enemy.position.x, enemy.position.y, currentMapFrame, enemy.position.areaID,
-                    gameplay))
-                currentMapFrame[enemy.position.y, enemy.position.x] = 'G';
-
-            RenderLineOfSight(currentMapFrame, missionForRender, enemy.position.x, enemy.position.y, enemy.direction,
-                enemy.range, '?', gameplay);
-        }
     }
 
     private void RenderLineOfSight(char[,] map, Mission missionForRender, int startX, int startY, string direction,

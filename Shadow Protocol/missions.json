@@ -44,7 +44,7 @@
           ]
         },
         {
-          "arenaName" : "First room",
+          "areaName" : "First room",
           "areaObjective":"Vezmi dokumenty a projdi bilimi dvermi", 
           "layout": [
             "########################################",
