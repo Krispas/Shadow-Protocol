@@ -27,9 +27,8 @@ public class GameManager
             case ConsoleKey.A: Console.WriteLine("Very well, Mužeš se tedy Přesunout do hlavní meny hry!");
                 Console.WriteLine("Enter pro pokračování ");
                 while (Console.ReadKey(true).Key != ConsoleKey.Enter)
-                {
-                }
-                menuSystems.ShowGameMenu();
+                {}
+                missionManager.StartMissionById(menuSystems.GameMenu(this, missionManager));
                 break;
             case ConsoleKey.N: Console.WriteLine("Tak to si ho musíš dát!");
                 Console.WriteLine("Enter pro pokračování ");

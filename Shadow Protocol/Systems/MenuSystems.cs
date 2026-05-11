@@ -3,8 +3,7 @@
 public class MenuSystems
 {
     private string systemUsername = Environment.UserName;
-    public GameManager gameManager = new();
-
+    
     public int mainMenu()
     {
         string[] options =
@@ -159,12 +158,96 @@ public class MenuSystems
         Console.ResetColor();
     }
 
-    public void ShowGameMenu()
+    public int GameMenu(GameManager gameManager, MissionManager missionManager)
+    { 
+        int selectedIndex = 0;
+        Console.CursorVisible = false;
+
+        while (true)
+        {
+            Console.Clear();
+            List<string> levels = new();
+
+            foreach (Mission mission in missionManager.missions)
+            {
+                CompletedMission? completedMission = null;
+
+                foreach (CompletedMission saveMission in gameManager.currentSave.completedMissions)
+                {
+                    if (saveMission.missionId == mission.id)
+                    {
+                        completedMission = saveMission;
+                        break;
+                    }
+                }
+
+                if (completedMission == null)
+                {
+                    levels.Add($"{mission.id} - Mise nedokoncena");
+                }
+                else
+                {
+                    string completedWith = "";
+
+                    if (completedMission.completedWithAgent)
+                        completedWith += "Agent, ";
+
+                    if (completedMission.completeWithSniper)
+                        completedWith += "Sniper, ";
+
+                    if (completedMission.completeWithOperator)
+                        completedWith += "Operator, ";
+
+                    completedWith = completedWith.TrimEnd(',', ' ');
+
+                    levels.Add($"{mission.id} - Mise dokoncena s {completedWith}");
+                }
+            }
+
+            ShowGameMenu(gameManager, selectedIndex, levels);
+
+            ConsoleKey key = Console.ReadKey(true).Key;
+
+            switch (key)
+            {
+                case ConsoleKey.UpArrow:
+                    selectedIndex--;
+
+                    if (selectedIndex < 0)
+                        selectedIndex = gameManager.currentSave.completedMissions.Count - 1;
+
+                    break;
+
+                case ConsoleKey.DownArrow:
+                    selectedIndex++;
+
+                    if (selectedIndex >= gameManager.currentSave.completedMissions.Count)
+                        selectedIndex = 0;
+
+                    break;
+
+                case ConsoleKey.Enter:
+                    Console.Clear();
+                    return selectedIndex;
+            }
+        }
+    }
+
+    public void ShowGameMenu(GameManager gameManager, int selectedIndex, List<string> levels)
     {
         Console.WriteLine($"Vítej ve hře {gameManager.currentSave.playerName}!");
-        Console.WriteLine("1" +
-                          "Completed with Agent" +
-                          "Completed with Operator" +
-                          "Completed with Mercenary");
+        for (int i = 0; i < gameManager.currentSave.completedMissions.Count ; i++)
+        {
+            if (i == selectedIndex)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($">  <");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine($" ");
+            }
+        }
     }
 }

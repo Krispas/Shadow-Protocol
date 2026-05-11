@@ -71,8 +71,6 @@ public class GameplayManager
                     Interact();
                     break;
             }
-
-            //CheckMissionState(); //DODELAT
         }
     }
 
@@ -112,7 +110,6 @@ public class GameplayManager
             {
                 colorsOfKeycardsOwned.Add(keycard.color);
             }
-                
         }
 
         foreach (Door door in currentMission.doors)
@@ -143,6 +140,17 @@ public class GameplayManager
                 characterX = door.position.x;
                 characterY = door.position.y;
             }
+
+            if (currentMission.exit.x == characterX && currentMission.exit.y == characterY &&
+                currentMission.exit.areaID == characterArenaID)
+            {
+                if (missionFinished | currentMission.documents.hasDocuments)
+                {
+                    ShowMissionCompleted();
+                    return;
+                }
+                ShowMissionFailed();
+            }
         }
         
     }
@@ -158,6 +166,7 @@ public class GameplayManager
 
         while (Console.ReadKey(true).Key != ConsoleKey.Enter)
         {}
+        missionFinished = true;
     }
 
     private void ShowMissionCompleted()
@@ -167,11 +176,12 @@ public class GameplayManager
         Console.WriteLine("Mise splnena, dobra prace.");
         Console.ResetColor();
         Console.WriteLine();
-        Console.WriteLine("Zmackni Enter pro navrat do main menu.");
+        Console.WriteLine("Zmackni Enter pro navrat do menu.");
 
         while (Console.ReadKey(true).Key != ConsoleKey.Enter)
         {
         }
+        missionFinished = true;
     }
 
     private bool IsPlayerDetected()

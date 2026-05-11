@@ -58,6 +58,7 @@ public class Mission
     public int id;
     public string name = "";
     public string overallObjective = "";
+    public bool objectiveCompleted = false;
 
     public List<string> legend = new();
     public List<string> instructions = new();
