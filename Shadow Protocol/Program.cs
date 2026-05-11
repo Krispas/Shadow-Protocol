@@ -1,4 +1,5 @@
-﻿using Shadow_Protocol;
+﻿using System.Runtime.CompilerServices;
+using Shadow_Protocol;
 using Shadow_Protocol.Systems;
 
 class Program
@@ -6,10 +7,10 @@ class Program
     static void Main()
     {
         SaveManager saveManager = new SaveManager();
-        GameManager gameManager = new GameManager();
         MenuSystems menuSystems = new MenuSystems();
         MissionManager missionManager = new MissionManager();
-
+        GameManager gameManager = new GameManager(missionManager);
+        
         string path = Path.Combine(AppContext.BaseDirectory, "missions.json"); 
         missionManager.LoadMissions(path);
 
@@ -31,11 +32,10 @@ class Program
                     if (selectedSaveIndex != -1)
                     {
                         GameSave loadedSave = saveManager.activeSaveFile.saves[selectedSaveIndex];
-
                         gameManager.currentSave = loadedSave;
+                        gameManager.LoadGame();
 
-                        Console.WriteLine($"Nacten save s hracem: {loadedSave.playerName}");
-                        Console.ReadKey(true);
+
                     }
 
                     break;

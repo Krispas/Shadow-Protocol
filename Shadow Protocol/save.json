@@ -4,99 +4,33 @@
       "saveId": 1,
       "playerName": "aaa",
       "agent": {
-        "level": 5
+        "level": 0
       },
       "sniper": {
-        "level": 2
+        "level": 0
       },
       "operator_": {
-        "level": 4
+        "level": 0
       },
-      "completedMissions": [
-        {
-          "missionId": 0,
-          "completedWithAgent": true,
-          "completeWithSniper": false,
-          "completeWithOperator": false
-        },
-        {
-          "missionId": 1,
-          "completedWithAgent": false,
-          "completeWithSniper": true,
-          "completeWithOperator": false
-        },
-        {
-          "missionId": 2,
-          "completedWithAgent": false,
-          "completeWithSniper": false,
-          "completeWithOperator": true
-        }
-      ]
+      "completedMissions": []
     },
     {
       "saveId": 2,
       "playerName": "a",
       "agent": {
-        "level": 5
+        "level": 0
       },
       "sniper": {
-        "level": 2
+        "level": 0
       },
       "operator_": {
-        "level": 4
+        "level": 0
       },
-      "completedMissions": [
-        {
-          "missionId": 0,
-          "completedWithAgent": true,
-          "completeWithSniper": false,
-          "completeWithOperator": false
-        },
-        {
-          "missionId": 1,
-          "completedWithAgent": false,
-          "completeWithSniper": true,
-          "completeWithOperator": false
-        },
-        {
-          "missionId": 2,
-          "completedWithAgent": false,
-          "completeWithSniper": false,
-          "completeWithOperator": true
-        }
-      ]
+      "completedMissions": []
     },
     {
       "saveId": 3,
-      "playerName": "a",
-      "agent": {
-        "level": 0
-      },
-      "sniper": {
-        "level": 0
-      },
-      "operator_": {
-        "level": 0
-      },
-      "completedMissions": []
-    },
-    {
-      "saveId": 4,
       "playerName": "aa",
-      "agent": {
-        "level": 0
-      },
-      "sniper": {
-        "level": 0
-      },
-      "operator_": {
-        "level": 0
-      },
-      "completedMissions": []
-    },
-    {
-      "saveId": 5,
-      "playerName": "a",
       "agent": {
         "level": 0
       },

@@ -163,6 +163,45 @@
         "T = cíl",
         "X = exit"
       ],
+      "missionCharacter":{
+        "position": {
+          "x": 2,
+          "y": 2,
+          "areaID": 1
+        }
+      },
+      "exit": {
+        "position": {
+          "x": 35,
+          "y": 2,
+          "areaID": 2
+        },
+        "doors": [
+          {
+            "color": "red",
+            "position": {
+              "x": 35,
+              "y": 1,
+              "areaID": 0
+            },
+            "leadsToPosition": {
+              "x": 2,
+              "y": 12,
+              "areaID": 0
+            } 
+          }
+        ],
+        "keycards": [
+          {
+            "color": "red",
+            "position": {
+              "x": 27,
+              "y": 5, 
+              "areaID": 10
+          }
+          }
+        ]
+      },
       "layouts": [
         {
           "areaName": "Storage Corridor",

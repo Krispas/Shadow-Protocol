@@ -2,14 +2,15 @@
 
 namespace Shadow_Protocol.Systems;
 
-public class GameManager
+public class GameManager(MissionManager missionManager)
 {
     MenuSystems menuSystems = new();
-    MissionManager missionManager = new();
+    string path = Path.Combine(AppContext.BaseDirectory, "missions.json"); 
     SaveManager? saveManager = new();
     public GameplayManager gameplay = new();
     public GameSave? currentSave = new();
     public string? characterName;
+
     public void CreateNewGame()
     {
         Console.WriteLine("Welcome to Shadow Protocol!");
@@ -24,18 +25,32 @@ public class GameManager
         ConsoleKey answer = Console.ReadKey(true).Key;
         switch (answer)
         {
-            case ConsoleKey.A: Console.WriteLine("Very well, Mužeš se tedy Přesunout do hlavní meny hry!");
+            case ConsoleKey.A:
+                Console.WriteLine("Very well, Mužeš se tedy Přesunout do hlavní meny hry!");
                 Console.WriteLine("Enter pro pokračování ");
                 while (Console.ReadKey(true).Key != ConsoleKey.Enter)
-                {}
+                {
+                }
+
                 missionManager.StartMissionById(menuSystems.GameMenu(this, missionManager));
                 break;
-            case ConsoleKey.N: Console.WriteLine("Tak to si ho musíš dát!");
+            case ConsoleKey.N:
+                Console.WriteLine("Tak to si ho musíš dát!");
                 Console.WriteLine("Enter pro pokračování ");
                 while (Console.ReadKey(true).Key != ConsoleKey.Enter)
-                {}
+                {
+                }
+
                 missionManager.StartMissionById(0);
+                missionManager.StartMissionById(menuSystems.GameMenu(this, missionManager));
                 break;
         }
     }
+
+    public void LoadGame()
+        {
+            Console.WriteLine($"Nacten save s hracem: {currentSave.playerName}");
+            Console.ReadKey(true);
+            missionManager.StartMissionById(menuSystems.GameMenu(this, missionManager)); 
+        }
 }

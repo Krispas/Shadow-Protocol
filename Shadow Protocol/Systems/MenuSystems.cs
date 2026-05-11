@@ -4,6 +4,7 @@ public class MenuSystems
 {
     private string systemUsername = Environment.UserName;
     
+    
     public int mainMenu()
     {
         string[] options =
@@ -160,7 +161,7 @@ public class MenuSystems
 
     public int GameMenu(GameManager gameManager, MissionManager missionManager)
     { 
-        int selectedIndex = 0;
+        int selectedIndex = 1;
         Console.CursorVisible = false;
 
         while (true)
@@ -203,8 +204,8 @@ public class MenuSystems
                     levels.Add($"{mission.id} - Mise dokoncena s {completedWith}");
                 }
             }
-
             ShowGameMenu(gameManager, selectedIndex, levels);
+            Console.ResetColor();
 
             ConsoleKey key = Console.ReadKey(true).Key;
 
@@ -214,14 +215,14 @@ public class MenuSystems
                     selectedIndex--;
 
                     if (selectedIndex < 0)
-                        selectedIndex = gameManager.currentSave.completedMissions.Count - 1;
+                        selectedIndex = levels.Count - 1;
 
                     break;
 
                 case ConsoleKey.DownArrow:
                     selectedIndex++;
 
-                    if (selectedIndex >= gameManager.currentSave.completedMissions.Count)
+                    if (selectedIndex >= levels.Count)
                         selectedIndex = 0;
 
                     break;
@@ -233,20 +234,20 @@ public class MenuSystems
         }
     }
 
-    public void ShowGameMenu(GameManager gameManager, int selectedIndex, List<string> levels)
+    private void ShowGameMenu(GameManager gameManager, int selectedIndex, List<string> levels)
     {
         Console.WriteLine($"Vítej ve hře {gameManager.currentSave.playerName}!");
-        for (int i = 0; i < gameManager.currentSave.completedMissions.Count ; i++)
+        for (int i = 1; i < levels.Count ; i++)
         {
             if (i == selectedIndex)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($">  <");
+                Console.WriteLine($"> {levels[i]} <");
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($" ");
+                Console.WriteLine($" {levels[i]} ");
             }
         }
     }
