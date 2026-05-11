@@ -1,10 +1,12 @@
 ﻿using System.Text.Json;
 
 namespace Shadow_Protocol.Systems;
-
 public class SaveManager
 {
-    private string savePath = Path.Combine(AppContext.BaseDirectory, "save.json"); //Zde byla pomoc od AI
+    private string savePath = Path.Combine(
+        Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.FullName,
+        "save.json"
+    ); //Zde byla pomoc od AI abych mohl prepisovat save.json 
 
     public SaveFile activeSaveFile = new SaveFile();
 
@@ -50,6 +52,20 @@ public class SaveManager
         activeSaveFile.saves.Add(save);
         SaveSaves();
     }
+    public int GetNextSaveId()
+    {
+        LoadSaves();
+
+        int highestId = 0;
+
+        foreach (GameSave save in activeSaveFile.saves)
+        {
+            if (save.saveId > highestId)
+                highestId = save.saveId;
+        }
+
+        return highestId + 1;
+    }
 }
 
 public class SaveFile
@@ -65,7 +81,7 @@ public class GameSave
     public Sniper sniper = new();
     public Operator operator_ = new();
     
-    public List<CompletedMissionSave> completedMissions = new();
+    public List<CompletedMission> completedMissions = new();
 }
 
 public class Agent
@@ -84,7 +100,7 @@ public class Operator
 }
     
 
-public class CompletedMissionSave
+public class CompletedMission
 {
     public int missionId;
     public bool completedWithAgent;

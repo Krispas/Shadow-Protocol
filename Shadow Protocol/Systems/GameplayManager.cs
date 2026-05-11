@@ -121,19 +121,27 @@ public class GameplayManager
                 door.position.areaID == characterArenaID && door.color == null)
             {
                 currentAreaID = door.leadsToPosition.areaID;
+                characterX = door.leadsToPosition.x;
+                characterY = door.leadsToPosition.y;
             }
             if (door.position.x == characterX && door.position.y == characterY && door.position.areaID == characterArenaID && colorsOfKeycardsOwned.Contains(door.color))
             {
                 currentAreaID = door.leadsToPosition.areaID;
+                characterX = door.leadsToPosition.x;
+                characterY = door.leadsToPosition.y;
             }
             if (door.leadsToPosition.x == characterX && door.leadsToPosition.y == characterY &&
                 door.leadsToPosition.areaID == characterArenaID && door.color == null)
             {
                 currentAreaID = door.position.areaID;
+                characterX = door.position.x;
+                characterY = door.position.y;
             }
             if (door.leadsToPosition.x == characterX && door.leadsToPosition.y == characterY && door.leadsToPosition.areaID == characterArenaID && colorsOfKeycardsOwned.Contains(door.color))
             {
                 currentAreaID = door.position.areaID;
+                characterX = door.position.x;
+                characterY = door.position.y;
             }
         }
         
@@ -149,8 +157,7 @@ public class GameplayManager
         Console.WriteLine("Zmackni Enter pro navrat do main menu.");
 
         while (Console.ReadKey(true).Key != ConsoleKey.Enter)
-        {
-        }
+        {}
     }
 
     private void ShowMissionCompleted()

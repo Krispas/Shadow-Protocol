@@ -57,7 +57,6 @@ public class Mission
 {
     public int id;
     public string name = "";
-    public string type;
     public string overallObjective = "";
 
     public List<string> legend = new();

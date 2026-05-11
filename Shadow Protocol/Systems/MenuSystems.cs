@@ -3,6 +3,7 @@
 public class MenuSystems
 {
     private string systemUsername = Environment.UserName;
+    public GameManager gameManager = new();
 
     public int mainMenu()
     {
@@ -156,5 +157,14 @@ public class MenuSystems
         }
 
         Console.ResetColor();
+    }
+
+    public void ShowGameMenu()
+    {
+        Console.WriteLine($"Vítej ve hře {gameManager.currentSave.playerName}!");
+        Console.WriteLine("1" +
+                          "Completed with Agent" +
+                          "Completed with Operator" +
+                          "Completed with Mercenary");
     }
 }
